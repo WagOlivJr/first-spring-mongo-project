@@ -63,4 +63,11 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getAllWithPagination(pageNumber, pageSize), HttpStatus.OK);
     }
 
+    @GetMapping("/allWithSorting")
+    public List<Student>getAllWithSorting() {
+//    public ResponseEntity<List<Student>>getAllWithSorting() {
+        return studentService.getAllWithSorting();
+//        return new ResponseEntity<>(studentService.getAllWithSorting(), HttpStatus.OK);
+    }
+
 }

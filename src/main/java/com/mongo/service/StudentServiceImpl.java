@@ -5,6 +5,7 @@ import com.mongo.repository.StudentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +59,13 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getAllWithPagination(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         return studentRepository.findAll(pageable).getContent();
+    }
+
+    @Override
+    public List<Student> getAllWithSorting() {
+//        Sort sort = Sort.by(Sort.Direction.ASC,"name");
+        Sort sort = Sort.by("name");
+        return studentRepository.findAll(sort);
     }
 
 //    public Student getStudentById(String id) {
