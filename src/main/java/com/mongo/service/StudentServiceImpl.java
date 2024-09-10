@@ -1,7 +1,9 @@
 package com.mongo.service;
 
 import com.mongo.entity.Student;
+import com.mongo.repository.DepartmentRepository;
 import com.mongo.repository.StudentRepository;
+import com.mongo.repository.SubjectRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,9 +16,17 @@ import java.util.List;
 @AllArgsConstructor
 public class StudentServiceImpl implements StudentService {
     StudentRepository studentRepository;
+    SubjectRepository subjectRepository;
+    DepartmentRepository departmentRepository;
 
     @Override
     public Student createStudent(Student student) {
+        if(student.getDepartment() != null) {
+            departmentRepository.save(student.getDepartment());
+        }
+        if(student.getSubjects() != null && !student.getSubjects().isEmpty()) {
+            subjectRepository.saveAll(student.getSubjects());
+        }
         return studentRepository.save(student);
     }
 
@@ -27,6 +37,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getAllStudents() {
+        System.out.println("Inside getAllStudents() method of StudentServiceImpl");
         return studentRepository.findAll();
     }
 
@@ -66,6 +77,36 @@ public class StudentServiceImpl implements StudentService {
 //        Sort sort = Sort.by(Sort.Direction.ASC,"name");
         Sort sort = Sort.by("name");
         return studentRepository.findAll(sort);
+    }
+
+    @Override
+    public List<Student> byDepartmentName(String departmentName) {
+        return studentRepository.findByDepartmentDepartmentName(departmentName);
+    }
+
+    @Override
+    public List<Student> bySubjectName(String subjectName) {
+        return studentRepository.findBySubjectsSubjectName(subjectName);
+    }
+
+    @Override
+    public List<Student> byEmailIsLike(String email) {
+        return studentRepository.findByEmailIsLike(email);
+    }
+
+    @Override
+    public List<Student> byEmailContaining(String email) {
+        return studentRepository.findByEmailContaining(email);
+    }
+
+    @Override
+    public List<Student> byNameStartsWith(String name) {
+        return studentRepository.findByNameStartsWith(name);
+    }
+
+    @Override
+    public List<Student> byDepartmentId(String departmentId) {
+        return studentRepository.findByDepartmentId(departmentId);
     }
 
 //    public Student getStudentById(String id) {
