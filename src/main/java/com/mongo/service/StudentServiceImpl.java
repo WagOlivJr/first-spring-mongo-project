@@ -37,7 +37,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getAllStudents() {
-        System.out.println("Inside getAllStudents() method of StudentServiceImpl");
         return studentRepository.findAll();
     }
 
