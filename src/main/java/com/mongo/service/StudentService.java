@@ -4,7 +4,11 @@ import com.mongo.entity.Student;
 
 import java.util.List;
 
-public interface StudentService {
+public interface StudentService { // Interface para respeitar a lógica do Loose coupling.
+    // ela não implementa os mestodos, apenas os norteia para que a classe implementadora o faça.
+    // A grande vantagem aqui é que se por algum motivo for preciso mudar a implementação dos métodos, apenas a classe implementadora sofrerá alterações.
+    // A interface a quem os metodos pertencem e que está referenciada na camada do controlador não sofrerá alteração.
+    // Logo, o controlador está com acoplamento fraco com a implementação dos metodos que utiliza. Esse é um princípio SOLID
     Student createStudent(Student student);
     List<Student> getAllStudents();
     Student getStudentById(String id);

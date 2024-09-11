@@ -9,20 +9,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/student")
-@AllArgsConstructor
+@RestController // Indica ao Spring o componente controller e indica ainda que as respostas serão Restful, Json ou xml, e não alguma view html.
+@RequestMapping("/student") //indica um caminho "mínimo" (prefixo) padrão para todas as rotas da classe controladora
+@AllArgsConstructor // Lombok. torna desnecessário indicar @Autowired ao criar automaticamente o constructor.
 public class StudentController {
 
-    StudentService studentService;
+    StudentService studentService; // LooseCoupling. Entender como os metodos implementados na subclasse são acessados pela superclasse,
+    // numa espécie de inheritance inversa
 
-    @PostMapping("/create")
-    public ResponseEntity<Student> createStudent(@RequestBody Student student){
+    @PostMapping("/create") // verbo e rota do metodo a seguir
+    public ResponseEntity<Student> createStudent(@RequestBody Student student){ // @RequestBody desserializa o corpo da requisição (json),
+        // transformando-o no object definidido no parametro do metodo
         return new ResponseEntity<>(studentService.createStudent(student), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable String id) {
+    public ResponseEntity<Student> getStudent(@PathVariable String id) { // @PathVariable faz algo similar ao que faz a anotação acima.
         return new ResponseEntity<>(studentService.getStudentById(id),HttpStatus.OK);
     }
 
@@ -57,7 +59,7 @@ public class StudentController {
     }
 
     @GetMapping("/allWithPagination")
-    public ResponseEntity<List<Student>>getAllWithPagination(@RequestParam int pageNumber, @RequestParam int pageSize) {
+    public ResponseEntity<List<Student>>getAllWithPagination(@RequestParam int pageNumber, @RequestParam int pageSize) { //@RequestParam se parece muito com @PathVariable
         return new ResponseEntity<>(studentService.getAllWithPagination(pageNumber, pageSize), HttpStatus.OK);
     }
 
@@ -98,3 +100,15 @@ public class StudentController {
         return new ResponseEntity<>(studentService.byDepartmentId(departmentId), HttpStatus.OK);
     }
 }
+
+
+//EXEMPLO DE REQUESTMAPPING A NIVEL DE METODO:
+//@Controller  // pode ser substituido por @RestController
+//public class MyController {
+//
+//    @RequestMapping(value = "/hello", method = RequestMethod.GET) //POde ser substituido pela anotação do proprio metodo (verbo) utilizado
+//    public String sayHello(Model model) {
+//        model.addAttribute("message", "Hello, World!");
+//        return "hello";
+//    }
+//}

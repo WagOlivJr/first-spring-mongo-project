@@ -9,22 +9,26 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
-@Data
-@Document(collection = "student")
+@Data // Lombok, gera tudo: getters, setters, constructors, etc
+//@Document(collection = "student") // anotação indica que classe equivale a uma collection do mongo.
+@Document // Como o nome da classe é o mesmo nome da collection, o nome da colletion não precisa ser informado.
+// Se os nomes não baterem (inclusive sendo maiscula aqui e minuscula no banco), uma colletion é criada no banco.
 public class Student {
-    @Id
+    @Id //indica que é o ID do mongo e aparentemente não precisa informar o nome
     private String id;
-    @Field(name = "name")
+    @Field  // indica que é um atributo do documento e faz a mesma verificação por nome e notações banco/java
     private String name;
-    @Field(name = "mail")
+    @Field(name = "mail") // anotação com name pois há diferença entre banco e app
     private String email;
-    @DBRef
+    @DBRef //Indica relacionamento entre colletions do mongo. A classe relacionada precisa ser uma entidade, precisa ter anotação @Document e no banco apenas os ids fazem o relacionamento.
     private Department department;
-    @DBRef
+
+//    @DBRef // Caso a entidade de fato possua outras subentidades no banco, não precisa dessa anotação,
+//    respeita a lógica nosql e é tratada apenas como uma uma relação de entidade pai e filhos.
     private List<Subject> subjects;
 
-    @Transient
-    private double percentage;
+    @Transient // Indica que o atributo não deve ser persistido no banco de dados.
+    private double percentage; //Neste caso, é pelo simples faot de ser um atributo lógico, obtido com uma função que que itera sobre atributos que estão no banco
 
     public double getPercentage() {
         if(subjects != null && !subjects.isEmpty()) {
